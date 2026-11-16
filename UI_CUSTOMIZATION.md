@@ -1,76 +1,69 @@
-# 🎨 網頁外觀客製化指南 (Web UI Customization Guide)
+# 🎨 AI Music Studio 網頁外觀客製化手冊
 
-本專案將**邏輯程式碼 (`app.py`)** 與**外觀樣式 (`style.css`)** 完全解耦，讓您可以隨心所欲自由設計與打造屬於自己的介面風格！
-
----
-
-## 📁 核心檔案結構
-- 🎨 **`style.css`**：專門負責所有視覺樣式。包含色彩、字體、背景、卡片陰影、玻璃擬態（Glassmorphism）與按鈕動態效果。
-- ⚙️ **`app.py`**：核心後端推論邏輯與 Gradio 佈局，調用與 `mrfakename/yue2-3b` 相同的 **YuE2-3B** 系列模型。
-- 📦 **`requirements.txt`** & **`pre-requirements.txt`**：環境依賴配置。
-- 📑 **`README.md`**：Hugging Face Space 的配置設定檔（包含 `sdk: gradio`, `suggested_hardware: a10g-large` 與模型關聯標籤）。
+本指南說明整個專案的前端設計架構，以及為何此專案使用 `app.py + style.css` 而非傳統的 `index.html`。
 
 ---
 
-## 🛠️ 如何自訂外觀？
+## ❓ 常見疑問：為何專案中沒有 `index.html`？
 
-### 1. 修改主題配色（最簡單快速）
-在 `style.css` 的最上方 `:root` 中，您只要調整色碼即可快速切換整體氛圍：
+### 1. 靜態網頁（Static） vs. 機器學習應用（Gradio / Python）
+- **過去的靜態網頁（Static Space）**：只包含 HTML/CSS/JS，瀏覽器直接開啟 `index.html` 呈現畫面。但**純 HTML 網頁無法在伺服器端載入 30 億參數的 AI 模型（如 YuE2-3B、SheetSage2、Qwen3 等），也無法使用 Hugging Face 的 ZeroGPU 顯卡**。
+- **現在的 Gradio 應用（Gradio Space）**：
+  - `app.py` 是整個網站的伺服器與後端入口。
+  - Gradio 會在後端自動為您編譯並生成現代化的前端網頁 DOM 結構，並建立與 GPU 伺服器的高速 WebSocket 串流通訊。
+  - **在 Gradio 架構下，不需要、也不能放置靜態的 `index.html` 作為主入口**（否則 Hugging Face 會找不到 Python 應用的進入點）。
+
+### 2. 那我想自己寫 HTML 該怎麼辦？
+您完全可以在 `app.py` 中使用 `gr.HTML(""" 您的 HTML 代碼 """)` 嵌入任何標準 HTML 標籤！例如：
+- 頂部的標題與視覺橫幅
+- 音訊動態跳動的聲波特效（目前已實作於頁首）
+- 任何自訂的按鈕、提示卡片、圖片或文字說明
+所有嵌入的 HTML 元素都可以直接在 `style.css` 透過 class 或 id 進行百分之百的視覺設計！
+
+---
+
+## 🛠️ 如何調整與客製化現有設計？
+
+### 1. 調整主題配色與視覺光暈（開啟 `style.css`）
+在 `style.css` 最上方的 `:root` 變數區，您可以直接更換色碼：
 
 ```css
 :root {
-    /* 🌟 主題配色 - 換成您喜歡的 HEX 色碼 */
-    --primary-color: #6366f1;         /* 主色調 (如：科技藍 #2563eb、活力橘 #f97316、賽博朋克粉 #ec4899) */
-    --secondary-color: #a855f7;       /* 漸層次色 */
-    --accent-color: #06b6d4;          /* 標籤強調色 */
-    
-    /* 🌌 背景與層次 */
-    --bg-main: #0b0f19;               /* 主背景 (深黑、深海藍或純白) */
-    --bg-card: rgba(23, 27, 44, 0.85);/* 半透明卡片底色 */
-    --bg-border: rgba(255, 255, 255, 0.1); /* 邊框線條 */
+    /* 漸層品牌主色 (支援 CSS 漸層) */
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+    --primary-color: #6366f1;
+    --accent-cyan: #06b6d4;
+    --accent-pink: #ec4899;
+
+    /* 深邃背景色 */
+    --bg-page: #0a0d14;                  /* 網頁底色 */
+    --bg-card: rgba(18, 24, 38, 0.78);   /* 半透明卡片底色 */
+    --border-subtle: rgba(255, 255, 255, 0.08); /* 細緻邊框 */
 }
 ```
 
-### 2. 幾種推薦配色靈感 (可直接複製貼入 `style.css`)
-- **Cyberpunk 霓虹風格**：
-  ```css
-  --primary-color: #ff007f;
-  --secondary-color: #00f0ff;
-  --accent-color: #ffe600;
-  --bg-main: #05050d;
-  ```
-- **Studio 專業錄音室暗黑風格**：
-  ```css
-  --primary-color: #10b981;
-  --secondary-color: #059669;
-  --accent-color: #34d399;
-  --bg-main: #121212;
-  --bg-card: #1e1e1e;
-  ```
-- **Sunset 日落暖調風格**：
-  ```css
-  --primary-color: #f43f5e;
-  --secondary-color: #fb923c;
-  --accent-color: #fbbf24;
-  --bg-main: #180d19;
-  ```
+### 2. 調整按鈕或卡片圓角
+- 想要更圓潤柔和的風格？修改 `--radius-md: 20px;` 與 `--radius-lg: 28px;`。
+- 想要更俐落科技的直角風格？修改 `--radius-md: 4px;`。
 
-### 3. 修改頂部標題與頁首 (Header)
-在 `app.py` 內的 `gr.HTML(...)` 中：
-```html
-<div class="studio-header">
-    <div class="studio-title">🎵 您的專屬音樂工作室名稱</div>
-    <div class="studio-subtitle">這裡可以放您自己設計的歡迎詞與介紹！</div>
-</div>
+### 3. 新增或修改快速風格標籤 (Quick Presets)
+在 `app.py` 中的 `PRESET_STYLES` 陣列，您可以自由增加喜歡的音樂曲風：
+```python
+PRESET_STYLES = [
+    ("🌆 80s 復古合成波", "...提示詞..."),
+    ("☕ 慵懶 Lo-Fi", "...提示詞..."),
+    ("🎸 獨立民謠", "...提示詞..."),
+    # 可以新增您自己的專屬曲風！
+]
 ```
 
 ---
 
-## 🚀 如何同步更新至 Hugging Face Space？
-當您修改完成後，在終端機中執行：
+## 🚀 同步至 Hugging Face Space
+當您完成調整後，只需在終端機中執行：
 ```bash
 git add .
-git commit -m "Update custom UI design"
+git commit -m "Update studio design"
 git push origin main
 ```
-Hugging Face 便會自動偵測變更並以 ZeroGPU 重新建置您的自訂音樂生成空間！
+Hugging Face 便會自動重新打包並部署您設計的全新外觀！

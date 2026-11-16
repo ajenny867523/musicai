@@ -21,12 +21,10 @@ LYRIC_MODEL_ID = "Qwen/Qwen3-4B"
 ASR_MODEL_ID = "Qwen/Qwen3-ASR-1.7B"
 
 # ------------------------------------------------------------------------------
-# 🚀 載入模型 (Model Initialization)
-# ZeroGPU 在啟動時會模擬 CUDA，透過 spaces.GPU 在呼叫時動態分配實際 GPU 運算資源。
+# 🚀 載入模型 (Model Initialization with ZeroGPU)
 # ------------------------------------------------------------------------------
 set_memory_fraction = torch.cuda.set_per_process_memory_fraction
 try:
-    # 略過單進程 CUDA 記憶體限制以適應 ZeroGPU 模擬環境
     torch.cuda.set_per_process_memory_fraction = lambda *args, **kwargs: None
     pipe = YuE2Pipeline.from_pretrained(
         MODEL_ID,
@@ -61,7 +59,6 @@ asr_model = Qwen3ASRModel.from_pretrained(
 # ==============================================================================
 def estimate_duration(style, lyrics, planning_mode, render_quality, seed):
     del style, planning_mode, render_quality, seed
-    # 根據歌詞長度動態調整預估排隊時間
     return min(300, max(120, 120 + len(lyrics or "") // 12))
 
 
@@ -139,7 +136,7 @@ def analyze_cover_source(audio_path, language):
     return (
         abc_score,
         transcript,
-        "✅ 旋律與歌詞分析完成！請於下方檢視、標記段落後進行生成。",
+        "✅ 旋律與歌詞分析完成！請於下方檢視、確認段落後進行翻唱生成。",
     )
 
 
@@ -237,8 +234,17 @@ def generate_cover(style, lyrics, abc_score, render_quality, seed):
 
 
 # ==============================================================================
-# 💡 範例資料 (Examples)
+# 💡 精選風格預設與官方範例 (Presets & Examples)
 # ==============================================================================
+PRESET_STYLES = [
+    ("🌆 80s 復古合成波", "80s Retro Synthwave, pulsing analog synth, punchy drum machine, driving bassline, warm female vocal, nostalgic, euphoric"),
+    ("☕ 慵懶 Lo-Fi", "Chill Lo-Fi Hip Hop, mellow electric piano, vinyl crackle, warm upright bass, relaxed beats, soulful vocals"),
+    ("🎸 獨立民謠", "Indie Folk, acoustic fingerpicked guitar, intimate warm male vocal, gentle cello, poetic, melancholic"),
+    ("⚡ 賽博龐克電音", "Cyberpunk Industrial EDM, aggressive bass, distorted lead synth, fast BPM, dark futuristic, high energy"),
+    ("🌸 夢幻 City Pop", "80s Japanese City Pop, funk bass, sparkling brass, upbeat tempo, sweet female vocal, breezy summer groove"),
+    ("🏮 國風流行", "Chinese Style Pop, bamboo flute, guzheng, emotional string ensemble, expressive vocal, poetic ballad"),
+]
+
 EXAMPLES = [
     [
         "Dreamy synth-pop, warm female lead vocal, pulsing bass, shimmering synths, uplifting",
@@ -258,19 +264,31 @@ EXAMPLES = [
 
 
 # ==============================================================================
-# 🎨 網頁介面佈局 (Web UI Layout)
-# 支援 style.css 自由客製化樣式！
+# 🎨 現代高質感錄音室介面 (Studio UI Layout)
 # ==============================================================================
 css_file = Path(__file__).parent / "style.css"
 custom_css = css_file.read_text(encoding="utf-8") if css_file.exists() else ""
 
 with gr.Blocks(title="AI Music Studio · YuE2-3B", css=custom_css) as demo:
-    # 🌟 自訂頁首區塊 (Header)
+    # 🌟 頂部錄音室 Header 橫幅 + 聲波動態視覺特效
     gr.HTML("""
     <div class="studio-header">
-        <div class="studio-title">🎵 AI Music Studio</div>
+        <div class="studio-title-row">
+            <div class="studio-title">🎵 AI Music Studio</div>
+        </div>
         <div class="studio-subtitle">
             基於 <b>YuE2-3B</b> 全歌曲開源音樂大模型，輸入風格描述與歌詞即刻生成高品質完整歌曲或全新翻唱！
+        </div>
+        <div class="soundwave-box">
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
+            <div class="soundwave-bar"></div>
         </div>
         <div class="model-badges">
             <span class="badge">🔥 YuE2-3B Foundation</span>
@@ -288,22 +306,34 @@ with gr.Blocks(title="AI Music Studio · YuE2-3B", css=custom_css) as demo:
         # ----------------------------------------------------------------------
         with gr.Tab("✨ 創作歌曲 (Create Song)"):
             with gr.Row():
+                # 左側：創作控制面板
                 with gr.Column(scale=3, elem_classes=["studio-card"]):
                     style = gr.Textbox(
-                        label="音樂風格與氛圍 (Style Prompt)",
+                        label="🎵 音樂風格與氛圍 (Style Prompt)",
                         placeholder="例如：Dreamy synth-pop, warm female lead vocal, pulsing bass, shimmering synths...",
                         value="Dreamy synth-pop, warm female lead vocal, pulsing bass, shimmering synths",
                         lines=2,
                     )
                     
+                    # 快速風格標籤按鈕 (點擊自動填入)
+                    gr.Markdown("⚡ **熱門風格快速標籤 (點擊填入)：**")
+                    with gr.Row():
+                        for label, prompt_val in PRESET_STYLES[:3]:
+                            btn = gr.Button(label, elem_classes=["preset-tag-btn"], size="sm")
+                            btn.click(fn=lambda p=prompt_val: p, outputs=[style])
+                    with gr.Row():
+                        for label, prompt_val in PRESET_STYLES[3:]:
+                            btn = gr.Button(label, elem_classes=["preset-tag-btn"], size="sm")
+                            btn.click(fn=lambda p=prompt_val: p, outputs=[style])
+                    
                     with gr.Accordion("🪄 使用 Qwen3-4B 智能寫詞 (AI Lyric Assistant)", open=False):
                         lyric_concept = gr.Textbox(
-                            label="歌曲靈感與主題故事 (Song Concept)",
+                            label="📝 歌曲靈感與主題故事 (Song Concept)",
                             placeholder="例如：夏日深夜在海邊奔馳的公路旅行，關於青春與告別的故事...",
                         )
                         with gr.Row():
                             lyric_language = gr.Dropdown(
-                                choices=["English", "Chinese", "Cantonese", "Japanese", "Korean", "Spanish"],
+                                choices=["Chinese", "English", "Cantonese", "Japanese", "Korean", "Spanish"],
                                 value="Chinese",
                                 label="歌詞語言 (Language)",
                             )
@@ -317,10 +347,10 @@ with gr.Blocks(title="AI Music Studio · YuE2-3B", css=custom_css) as demo:
                                 label="段落架構 (Structure)",
                             )
                         lyric_seed = gr.Number(value=42, precision=0, label="詞曲隨機種子 (Seed)")
-                        write_lyrics_button = gr.Button("📝 一鍵生成歌詞", elem_classes=["secondary-action-btn"])
+                        write_lyrics_button = gr.Button("📝 一鍵生成結構化歌詞", elem_classes=["secondary-action-btn"])
                     
                     lyrics = gr.Textbox(
-                        label="段落歌詞 (Lyrics - 請務必使用 [Verse], [Chorus] 等標籤)",
+                        label="📜 段落歌詞 (Lyrics - 請務必使用 [Verse], [Chorus] 等標籤)",
                         lines=14,
                         placeholder="[Verse]\n在微涼的晚風中...\n\n[Chorus]\n奔向未知的彼方...",
                     )
@@ -329,22 +359,35 @@ with gr.Blocks(title="AI Music Studio · YuE2-3B", css=custom_css) as demo:
                         planning_mode = gr.Radio(
                             choices=[("旋律 + 和弦 (Melody + chords)", "full"), ("純旋律 (Melody only)", "melody"), ("不生成樂譜 (No score)", "off")],
                             value="full",
-                            label="符號規劃模式 (Symbolic Planning)",
+                            label="🎼 符號規劃模式 (Symbolic Planning)",
                         )
                         render_quality = gr.Radio(
                             choices=[("快速 · 16 步 (Fast)", 16), ("最佳品質 · 32 步 (Best)", 32)],
                             value=16,
-                            label="彩現品質 (Render Quality)",
+                            label="🎚️ 彩現品質 (Render Quality)",
                         )
-                        seed = gr.Number(value=42, precision=0, label="音樂隨機種子 (Seed)")
+                        seed = gr.Number(value=42, precision=0, label="隨機種子 (Seed)")
 
                     generate_btn = gr.Button("🚀 開始生成音樂 (Generate Song)", elem_classes=["primary-action-btn"])
 
+                # 右側：生成結果展示面板
                 with gr.Column(scale=2, elem_classes=["studio-card"]):
-                    audio_output = gr.Audio(label="生成音訊 (MP3 預覽)", type="filepath", format="mp3")
+                    gr.HTML("""
+                    <div class="output-hero-box">
+                        <div class="output-hero-title">
+                            <span>🎧 音樂播放與母帶匯出</span>
+                            <div class="output-tags">
+                                <span class="output-tag">48kHz</span>
+                                <span class="output-tag">Stereo</span>
+                                <span class="output-tag">ZeroGPU</span>
+                            </div>
+                        </div>
+                    </div>
+                    """)
+                    audio_output = gr.Audio(label="生成音訊 (MP3 串流預覽)", type="filepath", format="mp3")
                     duration_badge = gr.Markdown("", elem_classes=["time-badge"])
-                    flac_download = gr.File(label="下載無損音質 (Lossless FLAC)")
-                    with gr.Accordion("📜 符號樂譜 (ABC Score)", open=False):
+                    flac_download = gr.File(label="📦 下載無損音質檔案 (Lossless FLAC)")
+                    with gr.Accordion("📜 符號樂譜檢視 (Generated ABC Score)", open=False):
                         score_output = gr.Code(language=None, label="可編輯 ABC 樂譜")
 
             gr.Examples(
@@ -358,59 +401,73 @@ with gr.Blocks(title="AI Music Studio · YuE2-3B", css=custom_css) as demo:
         # ----------------------------------------------------------------------
         with gr.Tab("🎧 歌曲翻唱與改編 (AI Cover)"):
             gr.Markdown(
-                "上傳歌曲音訊，透過 **SheetSage2** 辨識旋律並以 **Qwen3-ASR** 轉錄歌詞，"
-                "接著您可以調整樂譜或歌詞，並指定全新曲風進行 AI 翻唱！"
+                "💡 **兩步驟完成 AI 翻唱**：上傳原曲後，由 **SheetSage2** 抽取主旋律 ABC 譜，"
+                "並由 **Qwen3-ASR** 轉錄歌詞，接著指定新曲風即可生成全新音樂風格翻唱！"
             )
             with gr.Row():
                 with gr.Column(scale=3, elem_classes=["studio-card"]):
+                    gr.Markdown("### <span class='step-number'>1</span> 來源音訊分析 (Source Track)")
                     source_audio = gr.Audio(
-                        label="來源歌曲音訊 (Source Song)",
+                        label="上傳來源歌曲音訊 (Source Song)",
                         type="filepath",
                         sources=["upload"],
                     )
                     asr_language = gr.Dropdown(
-                        choices=["Auto-detect", "English", "Chinese", "Cantonese", "Japanese", "Korean", "Spanish"],
+                        choices=["Auto-detect", "Chinese", "English", "Cantonese", "Japanese", "Korean", "Spanish"],
                         value="Auto-detect",
                         label="歌詞辨識語言 (Lyrics Language)",
                     )
-                    transcribe_button = gr.Button("🔍 1. 分析並轉錄旋律與歌詞", elem_classes=["secondary-action-btn"])
+                    transcribe_button = gr.Button("🔍 分析並轉錄旋律與歌詞", elem_classes=["secondary-action-btn"])
                     transcription_status = gr.Markdown()
                     
+                    gr.Markdown("### <span class='step-number'>2</span> 目標風格與翻唱設定 (Target Style)")
                     cover_style = gr.Textbox(
-                        label="目標改編風格 (New Style)",
+                        label="新音樂風格 (Target Style)",
                         placeholder="例如：Jazz-funk, warm lead vocal, Rhodes piano, tight drums...",
                     )
                     cover_lyrics = gr.Textbox(
                         label="對齊歌詞 (Matched Lyrics - 請包含段落標籤)",
-                        lines=10,
+                        lines=9,
                         placeholder="[Verse]\n依據原曲段落排版的歌詞...",
                     )
                     cover_abc = gr.Textbox(
-                        label="旋律 ABC 樂譜 (可在生成前微調音符)",
-                        lines=10,
+                        label="旋律 ABC 樂譜 (可在生成前自由微調音符)",
+                        lines=9,
                         placeholder="X:1\nT:Source melody\nM:4/4\nL:1/8\nK:C\n...",
                     )
                     with gr.Row():
                         cover_render_quality = gr.Radio(
                             choices=[("快速 · 16 步 (Fast)", 16), ("最佳品質 · 32 步 (Best)", 32)],
                             value=16,
-                            label="彩現品質 (Render Quality)",
+                            label="🎚️ 彩現品質 (Render Quality)",
                         )
                         cover_seed = gr.Number(value=831001, precision=0, label="隨機種子 (Seed)")
                     
-                    cover_button = gr.Button("🎉 2. 生成全新風格翻唱 (Generate Cover)", elem_classes=["primary-action-btn"])
+                    cover_button = gr.Button("🎉 開始生成全新風格翻唱 (Generate Cover)", elem_classes=["primary-action-btn"])
 
                 with gr.Column(scale=2, elem_classes=["studio-card"]):
-                    cover_audio = gr.Audio(label="翻唱成果 (MP3 預覽)", type="filepath", format="mp3")
+                    gr.HTML("""
+                    <div class="output-hero-box">
+                        <div class="output-hero-title">
+                            <span>🎙️ 翻唱成品與樂譜</span>
+                            <div class="output-tags">
+                                <span class="output-tag">Remix</span>
+                                <span class="output-tag">Cover</span>
+                            </div>
+                        </div>
+                    </div>
+                    """)
+                    cover_audio = gr.Audio(label="翻唱成果 (MP3 串流預覽)", type="filepath", format="mp3")
                     cover_duration_badge = gr.Markdown("", elem_classes=["time-badge"])
-                    cover_flac_download = gr.File(label="下載無損音質 (Lossless FLAC)")
-                    with gr.Accordion("📜 翻唱 ABC 樂譜", open=False):
+                    cover_flac_download = gr.File(label="📦 下載無損音質檔案 (Lossless FLAC)")
+                    with gr.Accordion("📜 使用之 ABC 樂譜", open=False):
                         cover_score = gr.Code(language=None, label="使用樂譜")
 
     # 🌟 自訂頁尾區塊 (Footer)
     gr.HTML("""
     <div class="studio-footer">
-        YuE2-3B 採用 CC BY-NC 4.0 授權條款 · 完整支援 ZeroGPU 加速 · 介面支援自訂 style.css 擴充
+        YuE2-3B 開源大模型採用 CC BY-NC 4.0 授權條款 · 採用 Hugging Face ZeroGPU 動態算力排程<br>
+        外觀設計支援 <a href="style.css">style.css</a> 全自訂 CSS 樣式擴充
     </div>
     """)
 

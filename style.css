@@ -1,234 +1,398 @@
 /* ==========================================================================
-   🎵 Music Studio - Custom Stylesheet (自訂介面外觀樣式表)
+   🎵 AI Music Studio - Master Stylesheet (精緻錄音室深色主題)
    ==========================================================================
-   您可以在此檔案自由修改網站的所有外觀設計！
-   只需修改下方的 CSS 變數（Variables），即可一鍵變更整體配色與風格。
+   專為 YuE2-3B 音樂生成工作站量身打造的高質感深色玻璃擬態介面。
+   您可以直接使用此設計，也可以在最上方的 :root 變數區隨時微調任何細節！
    ========================================================================== */
 
 :root {
-    /* 🌟 主題配色 (Theme Colors) - 可自由更換色碼 */
-    --primary-color: #6366f1;         /* 主色調 (預設: 科技靛藍) */
-    --primary-hover: #4f46e5;         /* 主色懸停 */
-    --primary-glow: rgba(99, 102, 241, 0.35); /* 主色光暈效果 */
-    
-    --secondary-color: #a855f7;       /* 次要色彩 (預設: 夢幻紫色) */
-    --accent-color: #06b6d4;          /* 強調色 (預設: 霓虹青色) */
-    
-    /* 🌌 背景與層次 (Background & Surface) */
-    --bg-main: #0b0f19;               /* 網頁主背景色 */
-    --bg-card: rgba(23, 27, 44, 0.85);/* 卡片底色 (半透明玻璃擬態) */
-    --bg-input: #111827;              /* 輸入框背景 */
-    --bg-border: rgba(255, 255, 255, 0.1); /* 邊框線條 */
-    --bg-border-focus: #6366f1;       /* 聚焦邊框線 */
+    /* 🎨 品牌與漸層主色 (Gradients & Brand Colors) */
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --accent-cyan: #06b6d4;
+    --accent-pink: #ec4899;
+    --accent-amber: #f59e0b;
+    --accent-emerald: #10b981;
 
-    /* ✍️ 文字色彩 (Typography) */
-    --text-primary: #f8fafc;          /* 主要文字 */
-    --text-secondary: #94a3b8;        /* 次要文字 / 說明標籤 */
-    --text-muted: #64748b;            /* 提示與佔位文字 */
-    
-    /* 📐 圓角與陰影 (Borders & Shadows) */
+    /* 🌌 深邃錄音室背景色彩 (Studio Obsidian Dark Theme) */
+    --bg-page: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.78);
+    --bg-card-hover: rgba(24, 32, 50, 0.88);
+    --bg-input: #0f1523;
+    --bg-input-focus: #141c2e;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-active: rgba(99, 102, 241, 0.5);
+
+    /* ✍️ 排版文字色彩 (Typography) */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    /* 💎 幾何與光效 (Geometry & Glows) */
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
     --radius-pill: 9999px;
-    
-    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 25px var(--primary-glow);
-    
-    /* 🔤 字型設定 */
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-}
-
-/* 全域基礎排版 */
-.gradio-container {
-    font-family: var(--font-family) !important;
-    background: radial-gradient(circle at 50% 0%, #171c32 0%, var(--bg-main) 70%) !important;
-    color: var(--text-primary) !important;
-    max-width: 1400px !important;
-    margin: 0 auto !important;
-    padding: 24px 16px !important;
+    --glow-primary: 0 0 25px rgba(99, 102, 241, 0.35);
+    --glow-button: 0 4px 20px rgba(99, 102, 241, 0.4), 0 0 35px rgba(236, 72, 153, 0.25);
+    --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
 }
 
 /* ==========================================================================
-   標題區塊 Header
+   全域佈局與容器
+   ========================================================================== */
+.gradio-container {
+    max-width: 1380px !important;
+    margin: 0 auto !important;
+    padding: 24px 18px !important;
+    background: radial-gradient(circle at 50% 0%, #171d33 0%, var(--bg-page) 65%) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif !important;
+    color: var(--text-main) !important;
+    min-height: 100vh !important;
+}
+
+/* ==========================================================================
+   頂部橫幅 Header & 聲波視覺特效
    ========================================================================== */
 .studio-header {
-    text-align: center;
-    padding: 30px 20px;
-    margin-bottom: 24px;
     background: var(--bg-card);
-    border: 1px solid var(--bg-border);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-    backdrop-filter: blur(12px);
+    padding: 36px 24px 28px 24px;
+    margin-bottom: 24px;
+    text-align: center;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-card);
 }
 
 .studio-header::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 20%;
-    right: 20%;
+    left: 10%;
+    right: 10%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), transparent);
+    background: var(--primary-gradient);
+    opacity: 0.9;
+}
+
+.studio-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 10px;
 }
 
 .studio-title {
-    font-size: 2.4rem;
-    font-weight: 800;
+    font-size: 2.6rem;
+    font-weight: 900;
     letter-spacing: -0.5px;
-    margin-bottom: 8px;
-    background: linear-gradient(135deg, #ffffff 30%, #a855f7 100%);
+    background: linear-gradient(135deg, #ffffff 30%, #c084fc 70%, #ec4899 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
+    margin: 0;
 }
 
 .studio-subtitle {
     font-size: 1.05rem;
-    color: var(--text-secondary);
-    max-width: 700px;
-    margin: 0 auto 14px auto;
+    color: var(--text-muted);
+    max-width: 720px;
+    margin: 0 auto 16px auto;
     line-height: 1.6;
+}
+
+/* 動態音訊聲波裝飾條 */
+.soundwave-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 26px;
+    margin: 12px 0 16px 0;
+}
+
+.soundwave-bar {
+    width: 3px;
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 3px;
+    animation: soundwave-jump 1.4s ease-in-out infinite alternate;
+}
+
+.soundwave-bar:nth-child(2) { animation-delay: 0.15s; }
+.soundwave-bar:nth-child(3) { animation-delay: 0.3s; }
+.soundwave-bar:nth-child(4) { animation-delay: 0.45s; }
+.soundwave-bar:nth-child(5) { animation-delay: 0.2s; }
+.soundwave-bar:nth-child(6) { animation-delay: 0.5s; }
+.soundwave-bar:nth-child(7) { animation-delay: 0.1s; }
+.soundwave-bar:nth-child(8) { animation-delay: 0.35s; }
+.soundwave-bar:nth-child(9) { animation-delay: 0.6s; }
+
+@keyframes soundwave-jump {
+    0% { height: 4px; opacity: 0.3; }
+    50% { height: 24px; opacity: 0.9; }
+    100% { height: 10px; opacity: 0.5; }
 }
 
 .model-badges {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 10px;
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
-    padding: 4px 12px;
-    font-size: 0.78rem;
+    gap: 6px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
     font-weight: 600;
     border-radius: var(--radius-pill);
-    background: rgba(99, 102, 241, 0.15);
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.28);
     color: #c7d2fe;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.badge:hover {
+    border-color: var(--accent-cyan);
+    color: #e0f2fe;
+    transform: translateY(-1px);
 }
 
 /* ==========================================================================
-   卡片與面板組件
+   卡片與面板 Studio Cards
    ========================================================================== */
 .studio-card {
     background: var(--bg-card) !important;
-    border: 1px solid var(--bg-border) !important;
+    border: 1px solid var(--border-subtle) !important;
     border-radius: var(--radius-md) !important;
-    padding: 20px !important;
+    padding: 22px !important;
     box-shadow: var(--shadow-card) !important;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(16px) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-/* 標籤頁 Tabs 樣式 */
+.studio-card:hover {
+    border-color: rgba(99, 102, 241, 0.25) !important;
+}
+
+/* ==========================================================================
+   標籤頁 Navigation Tabs
+   ========================================================================== */
 .tab-nav {
-    border-bottom: 1px solid var(--bg-border) !important;
-    margin-bottom: 20px !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    margin-bottom: 24px !important;
 }
 
 .tab-nav button {
     font-size: 1.05rem !important;
     font-weight: 600 !important;
-    color: var(--text-secondary) !important;
-    padding: 10px 20px !important;
+    color: var(--text-muted) !important;
+    padding: 12px 24px !important;
     border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
-    transition: all 0.2s ease !important;
+    border: none !important;
+    background: transparent !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.tab-nav button:hover {
+    color: var(--text-main) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
 }
 
 .tab-nav button.selected {
-    color: var(--text-primary) !important;
+    color: #ffffff !important;
+    background: rgba(99, 102, 241, 0.16) !important;
     border-bottom: 3px solid var(--primary-color) !important;
-    background: rgba(99, 102, 241, 0.1) !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
 }
 
 /* ==========================================================================
-   輸入元件與控制項目
+   輸入元件與預設標籤
    ========================================================================== */
 textarea, input[type="text"], input[type="number"], select {
     background-color: var(--bg-input) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--bg-border) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-subtle) !important;
     border-radius: var(--radius-sm) !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    padding: 10px 14px !important;
     transition: all 0.2s ease !important;
 }
 
 textarea:focus, input[type="text"]:focus, select:focus {
-    border-color: var(--bg-border-focus) !important;
-    box-shadow: 0 0 0 2px var(--primary-glow) !important;
+    background-color: var(--bg-input-focus) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
     outline: none !important;
 }
 
 label span {
-    font-weight: 600 !important;
-    color: var(--text-secondary) !important;
-    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: #cbd5e1 !important;
+    font-size: 0.92rem !important;
+    margin-bottom: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+/* 快速風格標籤 (Preset Pills) */
+.preset-tag-btn {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-pill) !important;
+    color: var(--text-muted) !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    padding: 6px 14px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.preset-tag-btn:hover {
+    background: rgba(99, 102, 241, 0.2) !important;
+    border-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
 }
 
 /* ==========================================================================
-   按鈕 (Buttons)
+   按鈕群組 (Buttons & Action Triggers)
    ========================================================================== */
 button.primary-action-btn {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    background: var(--primary-gradient) !important;
     color: #ffffff !important;
     border: none !important;
     border-radius: var(--radius-sm) !important;
-    font-weight: 700 !important;
-    font-size: 1.05rem !important;
-    padding: 12px 24px !important;
-    box-shadow: var(--shadow-glow) !important;
+    font-weight: 800 !important;
+    font-size: 1.12rem !important;
+    letter-spacing: 0.3px !important;
+    padding: 14px 28px !important;
+    box-shadow: var(--glow-button) !important;
     cursor: pointer !important;
-    transition: all 0.25s ease !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    width: 100% !important;
+    margin-top: 12px !important;
 }
 
 button.primary-action-btn:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6) !important;
+    box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6), 0 0 45px rgba(236, 72, 153, 0.4) !important;
+    filter: brightness(1.08) !important;
 }
 
 button.secondary-action-btn {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--bg-border) !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-subtle) !important;
     border-radius: var(--radius-sm) !important;
     font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding: 10px 18px !important;
     transition: all 0.2s ease !important;
 }
 
 button.secondary-action-btn:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
 }
 
 /* ==========================================================================
-   音訊播放器與結果卡片
+   音訊播放區與輸出卡片
    ========================================================================== */
-.audio-player-wrapper {
-    background: rgba(17, 24, 39, 0.7);
+.output-hero-box {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
     border-radius: var(--radius-md);
-    padding: 16px;
-    border: 1px solid var(--bg-border);
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.output-hero-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+}
+
+.output-tags {
+    display: flex;
+    gap: 6px;
+}
+
+.output-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
 }
 
 .time-badge {
-    text-align: right;
-    font-size: 0.85rem;
-    color: var(--accent-color);
-    font-weight: 600;
-    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.88rem;
+    color: var(--accent-cyan);
+    font-weight: 700;
+    padding: 4px 0;
 }
 
-/* 頁尾樣式 Footer */
+/* ==========================================================================
+   步驟指引 Step Badge (適用於翻唱工作流)
+   ========================================================================== */
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-right: 8px;
+}
+
+/* ==========================================================================
+   頁尾 Footer
+   ========================================================================== */
 .studio-footer {
     text-align: center;
-    margin-top: 36px;
-    padding: 20px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    border-top: 1px solid var(--bg-border);
+    margin-top: 48px;
+    padding: 24px 0;
+    color: var(--text-dim);
+    font-size: 0.86rem;
+    border-top: 1px solid var(--border-subtle);
+    line-height: 1.8;
+}
+
+.studio-footer a {
+    color: #a5b4fc;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.studio-footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
 }
