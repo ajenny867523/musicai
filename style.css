@@ -1,145 +1,162 @@
 /* ==========================================================================
-   🎵 AI Music Studio - Master Stylesheet (精緻錄音室深色主題)
+   🎵 AI Music Studio - Master Frontend Stylesheet
    ==========================================================================
-   專為 YuE2-3B 音樂生成工作站量身打造的高質感深色玻璃擬態介面。
-   您可以直接使用此設計，也可以在最上方的 :root 變數區隨時微調任何細節！
+   專門為前端作業與現代 Web 介面打造的錄音室主題設計系統 (Design System)
+   支援 CSS 變數自訂、玻璃擬態 (Glassmorphism)、動態跳動聲波與響應式排版。
    ========================================================================== */
 
 :root {
-    /* 🎨 品牌與漸層主色 (Gradients & Brand Colors) */
-    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+    /* 🎨 核心品牌色與主題漸層 (Brand Gradients) */
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
     --primary-color: #6366f1;
     --primary-hover: #4f46e5;
     --accent-cyan: #06b6d4;
     --accent-pink: #ec4899;
-    --accent-amber: #f59e0b;
     --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
 
-    /* 🌌 深邃錄音室背景色彩 (Studio Obsidian Dark Theme) */
-    --bg-page: #0a0d14;
-    --bg-card: rgba(18, 24, 38, 0.78);
-    --bg-card-hover: rgba(24, 32, 50, 0.88);
-    --bg-input: #0f1523;
-    --bg-input-focus: #141c2e;
+    /* 🌌 深邃錄音室黑曜石背景 (Obsidian Dark Palette) */
+    --bg-page: #080b12;
+    --bg-card: rgba(17, 23, 38, 0.75);
+    --bg-card-hover: rgba(22, 30, 50, 0.85);
+    --bg-input: #0c111d;
+    --bg-input-focus: #121929;
     --border-subtle: rgba(255, 255, 255, 0.08);
     --border-active: rgba(99, 102, 241, 0.5);
 
-    /* ✍️ 排版文字色彩 (Typography) */
+    /* ✍️ 排版與字色 (Typography) */
+    --font-sans: 'Plus Jakarta Sans', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --text-dim: #64748b;
 
-    /* 💎 幾何與光效 (Geometry & Glows) */
+    /* 📐 幾何數值與陰影 (Geometry & Radii) */
     --radius-sm: 8px;
     --radius-md: 14px;
-    --radius-lg: 20px;
+    --radius-lg: 22px;
     --radius-pill: 9999px;
-    --glow-primary: 0 0 25px rgba(99, 102, 241, 0.35);
-    --glow-button: 0 4px 20px rgba(99, 102, 241, 0.4), 0 0 35px rgba(236, 72, 153, 0.25);
-    --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 20px 45px -15px rgba(0, 0, 0, 0.65);
+    --shadow-glow: 0 4px 25px rgba(99, 102, 241, 0.35);
 }
 
 /* ==========================================================================
-   全域佈局與容器
+   全域基礎設定 (Reset & Base)
    ========================================================================== */
-.gradio-container {
-    max-width: 1380px !important;
-    margin: 0 auto !important;
-    padding: 24px 18px !important;
-    background: radial-gradient(circle at 50% 0%, #171d33 0%, var(--bg-page) 65%) !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif !important;
-    color: var(--text-main) !important;
-    min-height: 100vh !important;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-page);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 10% 20%, rgba(236, 72, 153, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 40%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.studio-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 32px 20px;
 }
 
 /* ==========================================================================
-   頂部橫幅 Header & 聲波視覺特效
+   頂部 Header 與動態聲波視覺
    ========================================================================== */
 .studio-header {
     background: var(--bg-card);
-    backdrop-filter: blur(20px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    padding: 36px 24px 28px 24px;
-    margin-bottom: 24px;
+    padding: 40px 24px 32px 24px;
     text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-card);
+    margin-bottom: 28px;
 }
 
 .studio-header::before {
     content: "";
     position: absolute;
     top: 0;
-    left: 10%;
-    right: 10%;
+    left: 15%;
+    right: 15%;
     height: 2px;
     background: var(--primary-gradient);
-    opacity: 0.9;
 }
 
-.studio-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 10px;
+.header-tag {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--accent-cyan);
+    margin-bottom: 8px;
 }
 
 .studio-title {
-    font-size: 2.6rem;
+    font-size: 2.8rem;
     font-weight: 900;
     letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #ffffff 30%, #c084fc 70%, #ec4899 100%);
+    background: linear-gradient(135deg, #ffffff 40%, #c084fc 75%, #ec4899 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: inline-block;
-    margin: 0;
+    margin-bottom: 12px;
 }
 
 .studio-subtitle {
     font-size: 1.05rem;
     color: var(--text-muted);
-    max-width: 720px;
-    margin: 0 auto 16px auto;
-    line-height: 1.6;
+    max-width: 760px;
+    margin: 0 auto 20px auto;
 }
 
-/* 動態音訊聲波裝飾條 */
-.soundwave-box {
+/* 動態聲波 (Audio Soundwave Animation) */
+.soundwave-container {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    height: 26px;
-    margin: 12px 0 16px 0;
+    height: 32px;
+    margin: 16px 0 20px 0;
 }
 
-.soundwave-bar {
-    width: 3px;
+.soundwave-container .bar {
+    width: 4px;
     height: 100%;
     background: var(--primary-gradient);
-    border-radius: 3px;
-    animation: soundwave-jump 1.4s ease-in-out infinite alternate;
+    border-radius: 4px;
+    animation: soundwave 1.2s ease-in-out infinite alternate;
 }
 
-.soundwave-bar:nth-child(2) { animation-delay: 0.15s; }
-.soundwave-bar:nth-child(3) { animation-delay: 0.3s; }
-.soundwave-bar:nth-child(4) { animation-delay: 0.45s; }
-.soundwave-bar:nth-child(5) { animation-delay: 0.2s; }
-.soundwave-bar:nth-child(6) { animation-delay: 0.5s; }
-.soundwave-bar:nth-child(7) { animation-delay: 0.1s; }
-.soundwave-bar:nth-child(8) { animation-delay: 0.35s; }
-.soundwave-bar:nth-child(9) { animation-delay: 0.6s; }
+.soundwave-container .bar:nth-child(2) { animation-delay: 0.1s; }
+.soundwave-container .bar:nth-child(3) { animation-delay: 0.25s; }
+.soundwave-container .bar:nth-child(4) { animation-delay: 0.4s; }
+.soundwave-container .bar:nth-child(5) { animation-delay: 0.15s; }
+.soundwave-container .bar:nth-child(6) { animation-delay: 0.5s; }
+.soundwave-container .bar:nth-child(7) { animation-delay: 0.2s; }
+.soundwave-container .bar:nth-child(8) { animation-delay: 0.35s; }
+.soundwave-container .bar:nth-child(9) { animation-delay: 0.6s; }
+.soundwave-container .bar:nth-child(10) { animation-delay: 0.3s; }
+.soundwave-container .bar:nth-child(11) { animation-delay: 0.45s; }
+.soundwave-container .bar:nth-child(12) { animation-delay: 0.18s; }
 
-@keyframes soundwave-jump {
+@keyframes soundwave {
     0% { height: 4px; opacity: 0.3; }
-    50% { height: 24px; opacity: 0.9; }
-    100% { height: 10px; opacity: 0.5; }
+    50% { height: 28px; opacity: 1; }
+    100% { height: 10px; opacity: 0.6; }
 }
 
-.model-badges {
+/* 模型標籤群 (Badges) */
+.badge-group {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -147,198 +164,373 @@
 }
 
 .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
     padding: 5px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
     border-radius: var(--radius-pill);
-    background: rgba(99, 102, 241, 0.12);
-    border: 1px solid rgba(99, 102, 241, 0.28);
-    color: #c7d2fe;
     backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease;
 }
 
 .badge:hover {
-    border-color: var(--accent-cyan);
-    color: #e0f2fe;
+    transform: translateY(-2px);
+}
+
+.badge-purple { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #d8b4fe; }
+.badge-blue { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #93c5fd; }
+.badge-pink { background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); color: #f472b6; }
+.badge-emerald { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+.badge-amber { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fcd34d; }
+
+/* ==========================================================================
+   導覽頁籤 (Tabs Navigation)
+   ========================================================================== */
+.studio-nav {
+    display: flex;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 28px;
+    padding-bottom: 4px;
+}
+
+.nav-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 12px 22px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-tab:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-tab.active {
+    color: #ffffff;
+    background: rgba(99, 102, 241, 0.15);
+    border-bottom: 3px solid var(--primary-color);
+}
+
+/* 內容面板分頁狀態 */
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   雙欄主要工作區 (Studio Grid)
+   ========================================================================== */
+.studio-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.studio-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 26px;
+    backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-card);
+}
+
+/* 表單元件 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+}
+
+.label-icon {
+    margin-right: 4px;
+}
+
+textarea, input[type="text"], input[type="number"], select {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 12px 14px;
+    transition: all 0.2s ease;
+    resize: vertical;
+}
+
+textarea:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus {
+    background-color: var(--bg-input-focus);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    outline: none;
+}
+
+/* 快速風格標籤 (Preset Chips) */
+.presets-section {
+    margin-top: 10px;
+}
+
+.presets-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.presets-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.preset-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.preset-chip:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--primary-color);
+    color: #ffffff;
     transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   卡片與面板 Studio Cards
-   ========================================================================== */
-.studio-card {
-    background: var(--bg-card) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--radius-md) !important;
-    padding: 22px !important;
-    box-shadow: var(--shadow-card) !important;
-    backdrop-filter: blur(16px) !important;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+/* 手風琴折疊 (Accordion) */
+.accordion-item {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    overflow: hidden;
 }
 
-.studio-card:hover {
-    border-color: rgba(99, 102, 241, 0.25) !important;
-}
-
-/* ==========================================================================
-   標籤頁 Navigation Tabs
-   ========================================================================== */
-.tab-nav {
-    border-bottom: 1px solid var(--border-subtle) !important;
-    margin-bottom: 24px !important;
-}
-
-.tab-nav button {
-    font-size: 1.05rem !important;
-    font-weight: 600 !important;
-    color: var(--text-muted) !important;
-    padding: 12px 24px !important;
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
-    border: none !important;
-    background: transparent !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.tab-nav button:hover {
-    color: var(--text-main) !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-}
-
-.tab-nav button.selected {
-    color: #ffffff !important;
-    background: rgba(99, 102, 241, 0.16) !important;
-    border-bottom: 3px solid var(--primary-color) !important;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
-}
-
-/* ==========================================================================
-   輸入元件與預設標籤
-   ========================================================================== */
-textarea, input[type="text"], input[type="number"], select {
-    background-color: var(--bg-input) !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--radius-sm) !important;
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important;
-    padding: 10px 14px !important;
-    transition: all 0.2s ease !important;
-}
-
-textarea:focus, input[type="text"]:focus, select:focus {
-    background-color: var(--bg-input-focus) !important;
-    border-color: var(--primary-color) !important;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
-    outline: none !important;
-}
-
-label span {
-    font-weight: 700 !important;
-    color: #cbd5e1 !important;
-    font-size: 0.92rem !important;
-    margin-bottom: 6px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-}
-
-/* 快速風格標籤 (Preset Pills) */
-.preset-tag-btn {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--radius-pill) !important;
-    color: var(--text-muted) !important;
-    font-size: 0.82rem !important;
-    font-weight: 500 !important;
-    padding: 6px 14px !important;
-    transition: all 0.2s ease !important;
-    cursor: pointer !important;
-}
-
-.preset-tag-btn:hover {
-    background: rgba(99, 102, 241, 0.2) !important;
-    border-color: var(--primary-color) !important;
-    color: #ffffff !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
-}
-
-/* ==========================================================================
-   按鈕群組 (Buttons & Action Triggers)
-   ========================================================================== */
-button.primary-action-btn {
-    background: var(--primary-gradient) !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: var(--radius-sm) !important;
-    font-weight: 800 !important;
-    font-size: 1.12rem !important;
-    letter-spacing: 0.3px !important;
-    padding: 14px 28px !important;
-    box-shadow: var(--glow-button) !important;
-    cursor: pointer !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    width: 100% !important;
-    margin-top: 12px !important;
-}
-
-button.primary-action-btn:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6), 0 0 45px rgba(236, 72, 153, 0.4) !important;
-    filter: brightness(1.08) !important;
-}
-
-button.secondary-action-btn {
-    background: rgba(255, 255, 255, 0.07) !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--radius-sm) !important;
-    font-weight: 600 !important;
-    font-size: 0.95rem !important;
-    padding: 10px 18px !important;
-    transition: all 0.2s ease !important;
-}
-
-button.secondary-action-btn:hover {
-    background: rgba(255, 255, 255, 0.14) !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
-}
-
-/* ==========================================================================
-   音訊播放區與輸出卡片
-   ========================================================================== */
-.output-hero-box {
-    background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    border-radius: var(--radius-md);
-    padding: 18px;
-    margin-bottom: 16px;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.output-hero-title {
+.accordion-header {
+    width: 100%;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    font-size: 0.95rem;
-    font-weight: 700;
+    align-items: center;
+    background: transparent;
+    border: none;
     color: #cbd5e1;
-    margin-bottom: 12px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
-.output-tags {
+.accordion-header:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.accordion-body {
+    display: none;
+    padding: 16px;
+    border-top: 1px solid var(--border-subtle);
+    background: rgba(12, 17, 29, 0.5);
+}
+
+.accordion-body.open {
+    display: block;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.col-half {
+    flex: 1;
+}
+
+/* 參數調節區 (Pill Radios) */
+.params-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.param-box label {
+    font-size: 0.84rem;
+    margin-bottom: 6px;
+}
+
+.radio-pill-group {
+    display: flex;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    gap: 2px;
+}
+
+.radio-pill {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    cursor: pointer;
+}
+
+.radio-pill input {
+    display: none;
+}
+
+.radio-pill span {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 6px 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.radio-pill input:checked + span {
+    background: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+/* ==========================================================================
+   按鈕 (Buttons)
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius-sm);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-glow);
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6);
+    filter: brightness(1.08);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-main);
+    border: 1px solid var(--border-subtle);
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 14px;
+    font-size: 0.85rem;
+}
+
+.btn-outline:hover {
+    border-color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+/* 旋轉載入指示 (Spinner) */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   右欄：播放器與輸出展示面板 (Player Panel)
+   ========================================================================== */
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.player-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.player-tags {
     display: flex;
     gap: 6px;
 }
 
-.output-tag {
+.tag {
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 800;
     padding: 2px 8px;
     border-radius: 4px;
     background: rgba(6, 182, 212, 0.15);
@@ -346,53 +538,250 @@ button.secondary-action-btn:hover {
     border: 1px solid rgba(6, 182, 212, 0.3);
 }
 
-.time-badge {
+.audio-box {
+    background: rgba(12, 17, 29, 0.8);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.empty-state {
+    padding: 24px 10px;
+}
+
+.empty-icon {
+    font-size: 2.8rem;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.empty-text {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #cbd5e1;
+    margin-bottom: 4px;
+}
+
+.empty-sub {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+}
+
+.active-player audio {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.audio-meta {
+    margin-bottom: 14px;
+}
+
+.took-badge {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.download-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* 狀態即時進度條 */
+.status-box {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+}
+
+.status-indicator {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    gap: 10px;
     font-size: 0.88rem;
-    color: var(--accent-cyan);
+    font-weight: 600;
+    color: #c7d2fe;
+    margin-bottom: 8px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-cyan);
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.4); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+.progress-bar-wrap {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    width: 100%;
+    height: 100%;
+    background: var(--primary-gradient);
+    animation: progress-indeterminate 1.8s infinite ease-in-out;
+}
+
+@keyframes progress-indeterminate {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* 樂譜展示卡片 */
+.score-card {
+    background: rgba(12, 17, 29, 0.6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+}
+
+.score-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
     font-weight: 700;
-    padding: 4px 0;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.btn-copy {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    color: var(--text-main);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.btn-copy:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+pre {
+    max-height: 240px;
+    overflow-y: auto;
+    background: #090c14;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: #93c5fd;
+    line-height: 1.5;
 }
 
 /* ==========================================================================
-   步驟指引 Step Badge (適用於翻唱工作流)
+   翻唱與說明分頁樣式
    ========================================================================== */
-.step-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.section-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+}
+
+.cover-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.step-card {
+    background: rgba(12, 17, 29, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 22px;
+}
+
+.step-badge {
+    display: inline-block;
     background: var(--primary-gradient);
     color: #ffffff;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 800;
-    margin-right: 8px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.step-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+/* About 技術卡片 */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.tech-box {
+    background: rgba(12, 17, 29, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+}
+
+.tech-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.tech-box h3 {
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.tech-box p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+}
+
+/* 頁尾 */
+.studio-footer {
+    text-align: center;
+    padding: 36px 0 10px 0;
+    color: var(--text-dim);
+    font-size: 0.86rem;
 }
 
 /* ==========================================================================
-   頁尾 Footer
+   響應式排版 (Responsive Media Queries)
    ========================================================================== */
-.studio-footer {
-    text-align: center;
-    margin-top: 48px;
-    padding: 24px 0;
-    color: var(--text-dim);
-    font-size: 0.86rem;
-    border-top: 1px solid var(--border-subtle);
-    line-height: 1.8;
-}
-
-.studio-footer a {
-    color: #a5b4fc;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.studio-footer a:hover {
-    color: #ffffff;
-    text-decoration: underline;
+@media (max-width: 960px) {
+    .studio-grid {
+        grid-template-columns: 1fr;
+    }
+    .cover-steps {
+        grid-template-columns: 1fr;
+    }
+    .studio-title {
+        font-size: 2.2rem;
+    }
 }

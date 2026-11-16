@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Studio · YuE2-3B 音樂生成工作站</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 引入 Google Fonts 提升排版質感 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="studio-container">
+        <!-- ============================================================== -->
+        <!-- 頂部頁首 (Header) & 音訊動態跳動聲波視覺 -->
+        <!-- ============================================================== -->
+        <header class="studio-header">
+            <div class="header-content">
+                <div class="header-tag">🎵 NEXT-GEN AI MUSIC CREATOR</div>
+                <h1 class="studio-title">AI Music Studio</h1>
+                <p class="studio-subtitle">
+                    基於開源全歌曲生成模型 <b>YuE2-3B</b> 與 <b>Qwen3</b> 系列大模型，輸入風格提示與歌詞，即刻生成具備立體聲伴奏與人聲唱腔的完整歌曲！
+                </p>
+
+                <!-- 動態跳動聲波裝飾條 -->
+                <div class="soundwave-container" title="Audio Visualizer">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+
+                <!-- 模型與技術標籤 -->
+                <div class="badge-group">
+                    <span class="badge badge-purple">🔥 YuE2-3B 核心基底</span>
+                    <span class="badge badge-blue">🎼 SheetSage2 旋律抽取</span>
+                    <span class="badge badge-pink">✍️ Qwen3-4B 智能寫詞</span>
+                    <span class="badge badge-emerald">🎙️ Qwen3-ASR 語音轉錄</span>
+                    <span class="badge badge-amber">⚡ ZeroGPU 免費算力調用</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ============================================================== -->
+        <!-- 導覽頁籤 (Tabs Navigation) -->
+        <!-- ============================================================== -->
+        <nav class="studio-nav">
+            <button class="nav-tab active" data-tab="create-tab">
+                <span class="icon">✨</span> 歌曲創作 (Create Song)
+            </button>
+            <button class="nav-tab" data-tab="cover-tab">
+                <span class="icon">🎧</span> 歌曲翻唱與改編 (AI Cover)
+            </button>
+            <button class="nav-tab" data-tab="about-tab">
+                <span class="icon">📖</span> 技術架構與模型說明 (About)
+            </button>
+        </nav>
+
+        <!-- ============================================================== -->
+        <!-- 主要內容區 (Main Content) -->
+        <!-- ============================================================== -->
+        <main class="studio-main">
+            <!-- ---------------------------------------------------------- -->
+            <!-- 分頁 1: 歌曲創作 (Create Song) -->
+            <!-- ---------------------------------------------------------- -->
+            <section id="create-tab" class="tab-pane active">
+                <div class="studio-grid">
+                    <!-- 左欄：控制與編輯面板 -->
+                    <div class="studio-card editor-panel">
+                        <!-- 音樂風格設定 -->
+                        <div class="form-group">
+                            <label for="styleInput">
+                                <span class="label-icon">🎵</span> 音樂風格與配器氛圍 (Style Prompt)
+                            </label>
+                            <textarea id="styleInput" rows="2" placeholder="輸入樂風、人聲音色、樂器編制、情緒氛圍...">Dreamy synth-pop, warm female lead vocal, pulsing bass, shimmering synths, uplifting</textarea>
+                            
+                            <!-- 快速風格推薦標籤 -->
+                            <div class="presets-section">
+                                <div class="presets-label">⚡ 點擊快速帶入風格：</div>
+                                <div class="presets-chips">
+                                    <button type="button" class="preset-chip" data-style="80s Retro Synthwave, pulsing analog synth, punchy drum machine, driving bassline, warm female vocal, nostalgic, euphoric">🌆 復古合成波</button>
+                                    <button type="button" class="preset-chip" data-style="Chill Lo-Fi Hip Hop, mellow electric piano, vinyl crackle, warm upright bass, relaxed beats, soulful vocals">☕ 慵懶 Lo-Fi</button>
+                                    <button type="button" class="preset-chip" data-style="Indie Folk, acoustic fingerpicked guitar, intimate warm male vocal, gentle cello, poetic, melancholic">🎸 獨立民謠</button>
+                                    <button type="button" class="preset-chip" data-style="Cyberpunk Industrial EDM, aggressive bass, distorted lead synth, fast BPM, dark futuristic, high energy">⚡ 賽博龐克</button>
+                                    <button type="button" class="preset-chip" data-style="80s Japanese City Pop, funk bass, sparkling brass, upbeat tempo, sweet female vocal, breezy summer groove">🌸 夢幻 City Pop</button>
+                                    <button type="button" class="preset-chip" data-style="Chinese Style Pop, bamboo flute, guzheng, emotional string ensemble, expressive vocal, poetic ballad">🏮 國風流行</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI 智能作詞折疊區 (Qwen3-4B) -->
+                        <div class="accordion-item">
+                            <button type="button" class="accordion-header" id="lyricAccordionBtn">
+                                <span><span class="label-icon">🪄</span> 使用 Qwen3-4B 智能作詞助理 (可選)</span>
+                                <span class="chevron">▼</span>
+                            </button>
+                            <div class="accordion-body" id="lyricAccordionBody">
+                                <div class="form-group">
+                                    <label for="lyricConcept">歌曲靈感或故事主題：</label>
+                                    <input type="text" id="lyricConcept" placeholder="例如：兩個好友在夏天深夜的城市天台聊天，關於青春與夢想...">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-half">
+                                        <label for="lyricLanguage">歌詞語言：</label>
+                                        <select id="lyricLanguage">
+                                            <option value="Chinese" selected>中文 (Chinese)</option>
+                                            <option value="English">英文 (English)</option>
+                                            <option value="Japanese">日文 (Japanese)</option>
+                                            <option value="Korean">韓文 (Korean)</option>
+                                            <option value="Cantonese">粵語 (Cantonese)</option>
+                                            <option value="Spanish">西班牙文 (Spanish)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-half">
+                                        <label for="lyricStructure">歌曲結構：</label>
+                                        <select id="lyricStructure">
+                                            <option value="Verse – Chorus – Verse – Chorus – Bridge – Chorus – Outro">標準流行 (Verse-Chorus-Bridge)</option>
+                                            <option value="Verse – Pre-Chorus – Chorus – Verse – Pre-Chorus – Chorus – Bridge – Chorus">完整起伏 (Pre-Chorus 強化)</option>
+                                            <option value="Intro – Verse – Chorus – Instrumental – Verse – Chorus – Outro">含樂器過門 (Instrumental)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" id="btnWriteLyrics" class="btn btn-secondary">
+                                    <span class="btn-icon">📝</span> 生成結構化歌詞
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 歌詞輸入區 -->
+                        <div class="form-group">
+                            <label for="lyricsInput">
+                                <span class="label-icon">📜</span> 歌曲歌詞 (請使用 [Verse], [Chorus] 等段落標籤)
+                            </label>
+                            <textarea id="lyricsInput" rows="12" placeholder="請填寫含段落標記的歌詞：&#10;[Verse]&#10;City windows turn to gold...&#10;&#10;[Chorus]&#10;Stay awake, the night is ours...">[Verse]
+City windows turn to gold
+Every streetlight has a story
+We are brave and we are bold
+Running toward the morning glory
+
+[Chorus]
+Stay awake, the night is ours
+We can dance beneath the stars
+Hold this moment, hold it tight
+We are sparks inside the night
+
+[Outro]
+Inside the night</textarea>
+                        </div>
+
+                        <!-- 參數調節區 -->
+                        <div class="params-row">
+                            <div class="param-box">
+                                <label>🎼 樂譜規劃 (Planning)</label>
+                                <div class="radio-pill-group">
+                                    <label class="radio-pill">
+                                        <input type="radio" name="planningMode" value="full" checked>
+                                        <span>旋律+和弦</span>
+                                    </label>
+                                    <label class="radio-pill">
+                                        <input type="radio" name="planningMode" value="melody">
+                                        <span>純旋律</span>
+                                    </label>
+                                    <label class="radio-pill">
+                                        <input type="radio" name="planningMode" value="off">
+                                        <span>無樂譜</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="param-box">
+                                <label>🎚️ 彩現品質 (Quality)</label>
+                                <div class="radio-pill-group">
+                                    <label class="radio-pill">
+                                        <input type="radio" name="renderQuality" value="16" checked>
+                                        <span>快速 16 步</span>
+                                    </label>
+                                    <label class="radio-pill">
+                                        <input type="radio" name="renderQuality" value="32">
+                                        <span>最佳 32 步</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="param-box">
+                                <label for="seedInput">🎲 隨機種子 (Seed)</label>
+                                <input type="number" id="seedInput" value="42" min="1" max="9999999">
+                            </div>
+                        </div>
+
+                        <!-- 觸發按鈕 -->
+                        <button type="button" id="btnGenerateSong" class="btn btn-primary btn-generate">
+                            <span class="btn-text">🚀 開始生成歌曲 (Generate Song)</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+                    </div>
+
+                    <!-- 右欄：播放展示與成品輸出 -->
+                    <div class="studio-card player-panel">
+                        <div class="player-header">
+                            <div class="player-title">🎧 音訊播放與母帶成品</div>
+                            <div class="player-tags">
+                                <span class="tag">48kHz</span>
+                                <span class="tag">Stereo</span>
+                                <span class="tag">YuE2-3B</span>
+                            </div>
+                        </div>
+
+                        <!-- 播放器區塊 -->
+                        <div class="audio-box" id="audioContainer">
+                            <div class="empty-state" id="emptyAudioState">
+                                <div class="empty-icon">🎵</div>
+                                <div class="empty-text">點擊左側「開始生成歌曲」後，音樂將於此播放</div>
+                                <div class="empty-sub">完整歌曲生成約需 1~2 分鐘，請耐心等候</div>
+                            </div>
+                            
+                            <!-- 實際音訊播放器 -->
+                            <div class="active-player hidden" id="activePlayerBox">
+                                <audio id="audioPlayer" controls></audio>
+                                <div class="audio-meta">
+                                    <span id="tookBadge" class="took-badge">⚡ 生成完成</span>
+                                </div>
+                                <div class="download-group">
+                                    <a id="btnDownloadMp3" href="#" download="song.mp3" class="btn btn-outline">
+                                        📥 下載 MP3 (192kbps)
+                                    </a>
+                                    <a id="btnDownloadFlac" href="#" download="song.flac" class="btn btn-outline">
+                                        💿 下載無損 FLAC
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 狀態即時進度條 -->
+                        <div id="statusBox" class="status-box hidden">
+                            <div class="status-indicator">
+                                <span class="pulse-dot"></span>
+                                <span id="statusText">正在連接 YuE2-3B 模型排程中...</span>
+                            </div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill"></div>
+                            </div>
+                        </div>
+
+                        <!-- 生成之 ABC 符號樂譜展示 -->
+                        <div class="score-card">
+                            <div class="score-header">
+                                <span>📜 生成之 ABC 樂譜 (Symbolic Score)</span>
+                                <button type="button" id="btnCopyScore" class="btn-copy">複製樂譜</button>
+                            </div>
+                            <pre><code id="abcScoreBox">等待歌曲生成中... 完成後將於此展示 ABC 符號樂譜。</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------------------------------------------------------- -->
+            <!-- 分頁 2: 歌曲翻唱與改編 (AI Cover) -->
+            <!-- ---------------------------------------------------------- -->
+            <section id="cover-tab" class="tab-pane">
+                <div class="studio-card">
+                    <h2 class="section-title">🎧 音訊翻唱與風格轉移 (AI Remix & Cover)</h2>
+                    <p class="section-desc">
+                        上傳一首歌曲，透過 <b>SheetSage2</b> 抽取旋律音符與 <b>Qwen3-ASR</b> 辨識歌詞，接著指定全新曲風即可打造全新版本！
+                    </p>
+
+                    <div class="cover-steps">
+                        <!-- 步驟 1 -->
+                        <div class="step-card">
+                            <div class="step-badge">STEP 1</div>
+                            <h3>上傳原曲並抽取旋律與歌詞</h3>
+                            <div class="form-group">
+                                <label for="sourceAudioInput">選擇音訊檔案 (MP3 / WAV / FLAC)：</label>
+                                <input type="file" id="sourceAudioInput" accept="audio/*">
+                            </div>
+                            <div class="form-group">
+                                <label for="asrLanguageSelect">人聲語言辨識：</label>
+                                <select id="asrLanguageSelect">
+                                    <option value="Auto-detect" selected>自動辨識 (Auto-detect)</option>
+                                    <option value="Chinese">中文</option>
+                                    <option value="English">英文</option>
+                                    <option value="Japanese">日文</option>
+                                    <option value="Korean">韓文</option>
+                                </select>
+                            </div>
+                            <button type="button" id="btnTranscribe" class="btn btn-secondary">
+                                🔍 開始轉錄旋律與歌詞
+                            </button>
+                        </div>
+
+                        <!-- 步驟 2 -->
+                        <div class="step-card">
+                            <div class="step-badge">STEP 2</div>
+                            <h3>指定新曲風並渲染翻唱成品</h3>
+                            <div class="form-group">
+                                <label for="coverStyleInput">全新音樂風格提示詞：</label>
+                                <input type="text" id="coverStyleInput" placeholder="例如：Jazz-funk, warm lead vocal, Rhodes piano, tight drums...">
+                            </div>
+                            <div class="form-group">
+                                <label for="coverLyricsInput">校對後歌詞：</label>
+                                <textarea id="coverLyricsInput" rows="5" placeholder="[Verse] ... [Chorus] ..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="coverAbcInput">抽取之 ABC 旋律譜：</label>
+                                <textarea id="coverAbcInput" rows="5" placeholder="X:1 T:Melody ..."></textarea>
+                            </div>
+                            <button type="button" id="btnGenerateCover" class="btn btn-primary">
+                                🎉 開始生成翻唱歌曲
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---------------------------------------------------------- -->
+            <!-- 分頁 3: 專案說明與架構 (About) -->
+            <!-- ---------------------------------------------------------- -->
+            <section id="about-tab" class="tab-pane">
+                <div class="studio-card about-card">
+                    <h2 class="section-title">📖 專案架構與前端設計說明</h2>
+                    <p>
+                        本專案為針對 <b>YuE2-3B 音樂生成工作站</b> 打造的獨立 Web 前端介面，符合課程作業要求的純前端架構（HTML5 + CSS3 + Vanilla JavaScript），並透過非同步 Client 端調用 Hugging Face 深度學習模型 API。
+                    </p>
+
+                    <div class="tech-grid">
+                        <div class="tech-box">
+                            <div class="tech-icon">🌐</div>
+                            <h3>語意化前端 (Semantic UI)</h3>
+                            <p>純 HTML5 與現代 CSS Grid / Flexbox 響應式排版，不依賴龐大框架，輕巧流暢。</p>
+                        </div>
+                        <div class="tech-box">
+                            <div class="tech-icon">🎨</div>
+                            <h3>設計系統 (Design Tokens)</h3>
+                            <p>集中於 <code>style.css</code> 的 CSS 自訂變數，便於客製化深色主題、漸層光暈與毛玻璃效果。</p>
+                        </div>
+                        <div class="tech-box">
+                            <div class="tech-icon">⚡</div>
+                            <h3>非同步 API 連接</h3>
+                            <p>前端利用 Hugging Face 官方 <code>@gradio/client</code> 連接雲端 GPU 伺服器進行推論。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ============================================================== -->
+        <!-- 頁尾 (Footer) -->
+        <!-- ============================================================== -->
+        <footer class="studio-footer">
+            <p>
+                <b>AI Music Studio</b> · 前端課程專案實作 · 模型權重遵循 CC BY-NC 4.0 授權規範<br>
+                Powered by YuE2-3B, SheetSage2, Qwen3 & Hugging Face Spaces
+            </p>
+        </footer>
+    </div>
+
+    <!-- 載入前端主程式邏輯 -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>

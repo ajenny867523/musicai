@@ -1,34 +1,19 @@
 ---
-title: YuE2-3B Music Generator
+title: AI Music Studio
 emoji: 🎵
-colorFrom: indigo
-colorTo: purple
-sdk: gradio
-sdk_version: 6.17.3
-app_file: app.py
-python_version: "3.10.13"
-suggested_hardware: a10g-large
-models:
-- m-a-p/YuE2-3B
-- m-a-p/YuE2-Vae
-- m-a-p/SheetSage2
-- Qwen/Qwen3-4B
-- Qwen/Qwen3-ASR-1.7B
-license: cc-by-nc-4.0
-short_description: Generate songs and covers from style prompts and lyrics using YuE2-3B.
+colorFrom: purple
+colorTo: indigo
+sdk: static
+pinned: false
 ---
 
-# 🎵 YuE2-3B Music Generator & Studio
+# 🎵 AI Music Studio · 前端作業專案
 
-This Hugging Face Space uses the **YuE2-3B** open music foundation model to generate full-length songs and AI covers from musical style descriptions and section-labeled lyrics.
+基於 **YuE2-3B** 音樂生成大模型與 **Qwen3** 智能作詞模型打造的獨立 Web 前端介面。
+採用純前端架構（HTML5 / CSS3 / ES Module JavaScript），並透過 Hugging Face 官方 `@gradio/client` 連線至後端模型伺服器進行非同步音訊運算。
 
-## 🚀 Features & Models
-- **Music Generation**: Powered by [`m-a-p/YuE2-3B`](https://huggingface.co/m-a-p/YuE2-3B) with full vocal and instrumental arrangement.
-- **Audio Decoder**: High fidelity audio rendering via [`m-a-p/YuE2-Vae`](https://huggingface.co/m-a-p/YuE2-Vae).
-- **Melody & Score Transcription**: [`m-a-p/SheetSage2`](https://huggingface.co/m-a-p/SheetSage2) extracts melody into editable ABC notation.
-- **AI Lyricist**: [`Qwen/Qwen3-4B`](https://huggingface.co/Qwen/Qwen3-4B) drafts structured lyrics in various languages.
-- **Vocal Transcription (ASR)**: [`Qwen/Qwen3-ASR-1.7B`](https://huggingface.co/Qwen/Qwen3-ASR-1.7B) transcribes lyrics from source audio for cover creation.
-
-## 🎨 UI Customization
-The web interface appearance can be customized in [`style.css`](style.css) and [`app.py`](app.py).
-See [`UI_CUSTOMIZATION.md`](UI_CUSTOMIZATION.md) for a guide on styling variables, colors, layouts, and components.
+## 📁 專案前端結構
+- **`index.html`**：語意化 HTML5 網頁結構（包含創作面板、動態聲波 Header、即時播放器與樂譜展示）。
+- **`style.css`**：現代黑曜石錄音室深色主題（Glassmorphism 毛玻璃、漸層流光、動態聲波跳動特效）。
+- **`script.js`**：前端互動邏輯、快速風格按鈕填入、以及透過 `@gradio/client` 調用 YuE2-3B API。
+- **`app.py`**（備用）：若老師要求使用 Python 後端環境，此檔案已備妥完整的 Gradio 與 ZeroGPU 程式碼。
