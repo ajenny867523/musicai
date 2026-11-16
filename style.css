@@ -1,28 +1,234 @@
-body {
-	padding: 2rem;
-	font-family: -apple-system, BlinkMacSystemFont, "Arial", sans-serif;
+/* ==========================================================================
+   🎵 Music Studio - Custom Stylesheet (自訂介面外觀樣式表)
+   ==========================================================================
+   您可以在此檔案自由修改網站的所有外觀設計！
+   只需修改下方的 CSS 變數（Variables），即可一鍵變更整體配色與風格。
+   ========================================================================== */
+
+:root {
+    /* 🌟 主題配色 (Theme Colors) - 可自由更換色碼 */
+    --primary-color: #6366f1;         /* 主色調 (預設: 科技靛藍) */
+    --primary-hover: #4f46e5;         /* 主色懸停 */
+    --primary-glow: rgba(99, 102, 241, 0.35); /* 主色光暈效果 */
+    
+    --secondary-color: #a855f7;       /* 次要色彩 (預設: 夢幻紫色) */
+    --accent-color: #06b6d4;          /* 強調色 (預設: 霓虹青色) */
+    
+    /* 🌌 背景與層次 (Background & Surface) */
+    --bg-main: #0b0f19;               /* 網頁主背景色 */
+    --bg-card: rgba(23, 27, 44, 0.85);/* 卡片底色 (半透明玻璃擬態) */
+    --bg-input: #111827;              /* 輸入框背景 */
+    --bg-border: rgba(255, 255, 255, 0.1); /* 邊框線條 */
+    --bg-border-focus: #6366f1;       /* 聚焦邊框線 */
+
+    /* ✍️ 文字色彩 (Typography) */
+    --text-primary: #f8fafc;          /* 主要文字 */
+    --text-secondary: #94a3b8;        /* 次要文字 / 說明標籤 */
+    --text-muted: #64748b;            /* 提示與佔位文字 */
+    
+    /* 📐 圓角與陰影 (Borders & Shadows) */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-pill: 9999px;
+    
+    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 25px var(--primary-glow);
+    
+    /* 🔤 字型設定 */
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
 }
 
-h1 {
-	font-size: 16px;
-	margin-top: 0;
+/* 全域基礎排版 */
+.gradio-container {
+    font-family: var(--font-family) !important;
+    background: radial-gradient(circle at 50% 0%, #171c32 0%, var(--bg-main) 70%) !important;
+    color: var(--text-primary) !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 24px 16px !important;
 }
 
-p {
-	color: rgb(107, 114, 128);
-	font-size: 15px;
-	margin-bottom: 10px;
-	margin-top: 5px;
+/* ==========================================================================
+   標題區塊 Header
+   ========================================================================== */
+.studio-header {
+    text-align: center;
+    padding: 30px 20px;
+    margin-bottom: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--bg-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
 }
 
-.card {
-	max-width: 620px;
-	margin: 0 auto;
-	padding: 16px;
-	border: 1px solid lightgray;
-	border-radius: 16px;
+.studio-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), transparent);
 }
 
-.card p:last-child {
-	margin-bottom: 0;
+.studio-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #ffffff 30%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.studio-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto 14px auto;
+    line-height: 1.6;
+}
+
+.model-badges {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #c7d2fe;
+}
+
+/* ==========================================================================
+   卡片與面板組件
+   ========================================================================== */
+.studio-card {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--bg-border) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 20px !important;
+    box-shadow: var(--shadow-card) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* 標籤頁 Tabs 樣式 */
+.tab-nav {
+    border-bottom: 1px solid var(--bg-border) !important;
+    margin-bottom: 20px !important;
+}
+
+.tab-nav button {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    padding: 10px 20px !important;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+.tab-nav button.selected {
+    color: var(--text-primary) !important;
+    border-bottom: 3px solid var(--primary-color) !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* ==========================================================================
+   輸入元件與控制項目
+   ========================================================================== */
+textarea, input[type="text"], input[type="number"], select {
+    background-color: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--bg-border) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.2s ease !important;
+}
+
+textarea:focus, input[type="text"]:focus, select:focus {
+    border-color: var(--bg-border-focus) !important;
+    box-shadow: 0 0 0 2px var(--primary-glow) !important;
+    outline: none !important;
+}
+
+label span {
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    font-size: 0.9rem !important;
+}
+
+/* ==========================================================================
+   按鈕 (Buttons)
+   ========================================================================== */
+button.primary-action-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 700 !important;
+    font-size: 1.05rem !important;
+    padding: 12px 24px !important;
+    box-shadow: var(--shadow-glow) !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+}
+
+button.primary-action-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6) !important;
+}
+
+button.secondary-action-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--bg-border) !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+button.secondary-action-btn:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ==========================================================================
+   音訊播放器與結果卡片
+   ========================================================================== */
+.audio-player-wrapper {
+    background: rgba(17, 24, 39, 0.7);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    border: 1px solid var(--bg-border);
+}
+
+.time-badge {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+/* 頁尾樣式 Footer */
+.studio-footer {
+    text-align: center;
+    margin-top: 36px;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--bg-border);
 }
